@@ -1,0 +1,107 @@
+slice_name: Records in last successful crawl
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 2__table
+  viz_type: big_number_total
+  matrixify_enable: false
+  matrixify_mode_columns: disabled
+  matrixify_dimension_selection_mode_columns: members
+  matrixify_dimension_columns:
+    dimension: ''
+    values: []
+  matrixify_topn_value_columns: 10
+  matrixify_all_sort_by_columns: a_to_z
+  matrixify_topn_order_columns: true
+  matrixify_show_column_headers: true
+  matrixify_fit_columns_dynamically: true
+  matrixify_mode_rows: disabled
+  matrixify_dimension_selection_mode_rows: members
+  matrixify_dimension_rows:
+    dimension: ''
+    values: []
+  matrixify_topn_value_rows: 10
+  matrixify_all_sort_by_rows: a_to_z
+  matrixify_topn_order_rows: true
+  matrixify_show_row_labels: true
+  matrixify_row_height: 300
+  matrixify_charts_per_row: 4
+  matrixify_cell_title_template: ''
+  metric:
+    expressionType: SQL
+    sqlExpression: max(products_found)
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: false
+    label: max(products_found)
+    optionName: metric_k73yp64jcpp_8lifadvbeg5
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: started_at_wib
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_lgfgj8yutyj_w34rj2dfxzc
+  - expressionType: SQL
+    sqlExpression: data_source = 'Live crawl' and status = 'OK'
+    clause: WHERE
+    subject: null
+    operator: null
+    comparator: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_pfcbbb2jfvi_1zf583z5lqo
+  header_font_size: 0.4
+  subtitle_font_size: 0.15
+  show_metric_name: false
+  metric_name_font_size: 0.15
+  y_axis_format: SMART_NUMBER
+  time_format: smart_date
+  force_timestamp_formatting: false
+  extra_form_data: {}
+  dashboards:
+  - 1
+  annotation_layers: []
+query_context: '{"datasource": {"id": 2, "type": "table"}, "force": false, "queries":
+  [{"filters": [{"col": "started_at_wib", "op": "TEMPORAL_RANGE", "val": "No filter"}],
+  "extras": {"having": "", "where": "(data_source = ''Live crawl'' and status = ''OK'')"},
+  "applied_time_extras": {}, "columns": [], "metrics": [{"expressionType": "SQL",
+  "sqlExpression": "max(products_found)", "column": null, "aggregate": null, "datasourceWarning":
+  false, "hasCustomLabel": false, "label": "max(products_found)", "optionName": "metric_k73yp64jcpp_8lifadvbeg5"}],
+  "annotation_layers": [], "series_limit": 0, "group_others_when_limit_reached": false,
+  "order_desc": true, "url_params": {}, "custom_params": {}, "custom_form_data": {}}],
+  "form_data": {"datasource": "2__table", "viz_type": "big_number_total", "matrixify_enable":
+  false, "matrixify_mode_columns": "disabled", "matrixify_dimension_selection_mode_columns":
+  "members", "matrixify_dimension_columns": {"dimension": "", "values": []}, "matrixify_topn_value_columns":
+  10, "matrixify_all_sort_by_columns": "a_to_z", "matrixify_topn_order_columns": true,
+  "matrixify_show_column_headers": true, "matrixify_fit_columns_dynamically": true,
+  "matrixify_mode_rows": "disabled", "matrixify_dimension_selection_mode_rows": "members",
+  "matrixify_dimension_rows": {"dimension": "", "values": []}, "matrixify_topn_value_rows":
+  10, "matrixify_all_sort_by_rows": "a_to_z", "matrixify_topn_order_rows": true, "matrixify_show_row_labels":
+  true, "matrixify_row_height": 300, "matrixify_charts_per_row": 4, "matrixify_cell_title_template":
+  "", "metric": {"expressionType": "SQL", "sqlExpression": "max(products_found)",
+  "column": null, "aggregate": null, "datasourceWarning": false, "hasCustomLabel":
+  false, "label": "max(products_found)", "optionName": "metric_k73yp64jcpp_8lifadvbeg5"},
+  "adhoc_filters": [{"expressionType": "SIMPLE", "subject": "started_at_wib", "operator":
+  "TEMPORAL_RANGE", "comparator": "No filter", "clause": "WHERE", "sqlExpression":
+  null, "isExtra": false, "isNew": false, "datasourceWarning": false, "filterOptionName":
+  "filter_lgfgj8yutyj_w34rj2dfxzc"}, {"expressionType": "SQL", "sqlExpression": "data_source
+  = ''Live crawl'' and status = ''OK''", "clause": "WHERE", "subject": null, "operator":
+  null, "comparator": null, "isExtra": false, "isNew": false, "datasourceWarning":
+  false, "filterOptionName": "filter_pfcbbb2jfvi_1zf583z5lqo"}], "header_font_size":
+  0.4, "subtitle_font_size": 0.15, "show_metric_name": false, "metric_name_font_size":
+  0.15, "y_axis_format": "SMART_NUMBER", "time_format": "smart_date", "force_timestamp_formatting":
+  false, "extra_form_data": {}, "dashboards": [1], "force": false, "result_format":
+  "json", "result_type": "full"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 74e7c5fb-ffdc-44c1-bbda-2a110d78b1e9
+version: 1.0.0
+dataset_uuid: 4db5c66b-4b09-4066-b19f-7868104d0b62

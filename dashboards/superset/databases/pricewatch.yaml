@@ -1,0 +1,15 @@
+database_name: pricewatch
+sqlalchemy_uri: postgresql+psycopg2://bi_reader:XXXXXXXXXX@postgres:5432/pricewatch
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_file_upload: false
+extra:
+  allows_virtual_table_explore: true
+impersonate_user: false
+configuration_method: dynamic_form
+uuid: 2d42d560-f82a-4ff8-ab65-58e89ca61e99
+version: 1.0.0

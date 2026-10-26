@@ -1,0 +1,240 @@
+table_name: report_price_recommendations
+main_dttm_col: prices_as_of
+currency_code_column: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+catalog: pricewatch
+schema: gold
+sql: null
+params: null
+template_params: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+folders: null
+uuid: f654657e-e0f6-4296-b6e4-0c8edf09b9f1
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: count
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+columns:
+- column_name: calculated_at
+  verbose_name: null
+  is_dttm: true
+  is_active: true
+  type: TIMESTAMP WITH TIME ZONE
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: prices_as_of
+  verbose_name: null
+  is_dttm: true
+  is_active: true
+  type: DATE
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: minimum_allowed_price_idr
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: BIGINT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: competitor_median_idr
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: BIGINT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: recommended_price_idr
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: BIGINT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: competitor_highest_idr
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: BIGINT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: competitor_lowest_idr
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: BIGINT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: vs_competitor_median_pct
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: NUMERIC
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: platforms_compared
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: INTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: how_it_was_set
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: data_source
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: pack_size
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: model_version
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: brand
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: category
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: product
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+version: 1.0.0
+database_uuid: 2d42d560-f82a-4ff8-ab65-58e89ca61e99

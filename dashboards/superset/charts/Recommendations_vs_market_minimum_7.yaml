@@ -1,0 +1,171 @@
+slice_name: Recommendations vs market minimum
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 3__table
+  viz_type: table
+  matrixify_enable: false
+  matrixify_mode_columns: disabled
+  matrixify_dimension_selection_mode_columns: members
+  matrixify_dimension_columns:
+    dimension: ''
+    values: []
+  matrixify_topn_value_columns: 10
+  matrixify_all_sort_by_columns: a_to_z
+  matrixify_topn_order_columns: true
+  matrixify_show_column_headers: true
+  matrixify_fit_columns_dynamically: true
+  matrixify_mode_rows: disabled
+  matrixify_dimension_selection_mode_rows: members
+  matrixify_dimension_rows:
+    dimension: ''
+    values: []
+  matrixify_topn_value_rows: 10
+  matrixify_all_sort_by_rows: a_to_z
+  matrixify_topn_order_rows: true
+  matrixify_show_row_labels: true
+  matrixify_row_height: 300
+  matrixify_charts_per_row: 3
+  matrixify_cell_title_template: ''
+  query_mode: raw
+  groupby: []
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    prices_as_of: true
+  all_columns:
+  - label: SKU
+    sqlExpression: product
+    expressionType: SQL
+  - label: Our recommended price
+    sqlExpression: recommended_price_idr
+    expressionType: SQL
+  - label: Min market
+    sqlExpression: competitor_lowest_idr
+    expressionType: SQL
+  - label: Position
+    sqlExpression: case when recommended_price_idr < competitor_lowest_idr * 0.98
+      then '<span style="background:#dcfce7;color:#15803d;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap">Below
+      market minimum</span>' when recommended_price_idr <= competitor_lowest_idr *
+      1.02 then '<span style="background:#e2e8f0;color:#475569;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap">In
+      line with minimum</span>' else '<span style="background:#fee2e2;color:#b91c1c;padding:3px
+      10px;border-radius:6px;font-weight:600;white-space:nowrap">Above market minimum</span>'
+      end
+    expressionType: SQL
+  - label: Lowest platform
+    sqlExpression: cheapest_platform
+    expressionType: SQL
+  - label: vs median %
+    sqlExpression: vs_competitor_median_pct
+    expressionType: SQL
+  percent_metrics: []
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: prices_as_of
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_t_prices_as_of
+  - expressionType: SQL
+    sqlExpression: platforms_compared >= 2
+    clause: WHERE
+    subject: null
+    operator: null
+    comparator: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_platformscompa
+  order_by_cols:
+  - '["vs_competitor_median_pct", true]'
+  order_desc: true
+  server_pagination: false
+  server_page_length: 10
+  row_limit: 200
+  percent_metric_calculation: row_limit
+  show_totals: false
+  table_timestamp_format: smart_date
+  include_search: true
+  allow_rearrange_columns: false
+  allow_render_html: true
+  column_config:
+    Our recommended price:
+      d3NumberFormat: ',d'
+    Min market:
+      d3NumberFormat: ',d'
+    vs median %:
+      d3NumberFormat: ',.1f'
+  show_cell_bars: false
+  align_pn: false
+  color_pn: true
+  comparison_color_enabled: false
+  comparison_color_scheme: Green
+  conditional_formatting: []
+  comparison_type: values
+  extra_form_data: {}
+  dashboards: []
+  page_length: 10
+  annotation_layers: []
+query_context: '{"datasource": {"id": 3, "type": "table"}, "force": false, "queries":
+  [{"filters": [{"col": "prices_as_of", "op": "TEMPORAL_RANGE", "val": "No filter"}],
+  "extras": {"having": "", "where": "(platforms_compared >= 2)"}, "columns": [{"label":
+  "SKU", "sqlExpression": "product", "expressionType": "SQL"}, {"label": "Our recommended
+  price", "sqlExpression": "recommended_price_idr", "expressionType": "SQL"}, {"label":
+  "Min market", "sqlExpression": "competitor_lowest_idr", "expressionType": "SQL"},
+  {"label": "Position", "sqlExpression": "case when recommended_price_idr < competitor_lowest_idr
+  * 0.98 then ''<span style=\"background:#dcfce7;color:#15803d;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap\">Below
+  market minimum</span>'' when recommended_price_idr <= competitor_lowest_idr * 1.02
+  then ''<span style=\"background:#e2e8f0;color:#475569;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap\">In
+  line with minimum</span>'' else ''<span style=\"background:#fee2e2;color:#b91c1c;padding:3px
+  10px;border-radius:6px;font-weight:600;white-space:nowrap\">Above market minimum</span>''
+  end", "expressionType": "SQL"}, {"label": "Lowest platform", "sqlExpression": "cheapest_platform",
+  "expressionType": "SQL"}, {"label": "vs median %", "sqlExpression": "vs_competitor_median_pct",
+  "expressionType": "SQL"}], "orderby": [["vs_competitor_median_pct", true]], "annotation_layers":
+  [], "row_limit": 200, "order_desc": true}], "form_data": {"datasource": "3__table",
+  "viz_type": "table", "matrixify_enable": false, "matrixify_mode_columns": "disabled",
+  "matrixify_dimension_selection_mode_columns": "members", "matrixify_dimension_columns":
+  {"dimension": "", "values": []}, "matrixify_topn_value_columns": 10, "matrixify_all_sort_by_columns":
+  "a_to_z", "matrixify_topn_order_columns": true, "matrixify_show_column_headers":
+  true, "matrixify_fit_columns_dynamically": true, "matrixify_mode_rows": "disabled",
+  "matrixify_dimension_selection_mode_rows": "members", "matrixify_dimension_rows":
+  {"dimension": "", "values": []}, "matrixify_topn_value_rows": 10, "matrixify_all_sort_by_rows":
+  "a_to_z", "matrixify_topn_order_rows": true, "matrixify_show_row_labels": true,
+  "matrixify_row_height": 300, "matrixify_charts_per_row": 3, "matrixify_cell_title_template":
+  "", "query_mode": "raw", "groupby": [], "time_grain_sqla": "P1D", "temporal_columns_lookup":
+  {"prices_as_of": true}, "all_columns": [{"label": "SKU", "sqlExpression": "product",
+  "expressionType": "SQL"}, {"label": "Our recommended price", "sqlExpression": "recommended_price_idr",
+  "expressionType": "SQL"}, {"label": "Min market", "sqlExpression": "competitor_lowest_idr",
+  "expressionType": "SQL"}, {"label": "Position", "sqlExpression": "case when recommended_price_idr
+  < competitor_lowest_idr * 0.98 then ''<span style=\"background:#dcfce7;color:#15803d;padding:3px
+  10px;border-radius:6px;font-weight:600;white-space:nowrap\">Below market minimum</span>''
+  when recommended_price_idr <= competitor_lowest_idr * 1.02 then ''<span style=\"background:#e2e8f0;color:#475569;padding:3px
+  10px;border-radius:6px;font-weight:600;white-space:nowrap\">In line with minimum</span>''
+  else ''<span style=\"background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap\">Above
+  market minimum</span>'' end", "expressionType": "SQL"}, {"label": "Lowest platform",
+  "sqlExpression": "cheapest_platform", "expressionType": "SQL"}, {"label": "vs median
+  %", "sqlExpression": "vs_competitor_median_pct", "expressionType": "SQL"}], "percent_metrics":
+  [], "adhoc_filters": [{"expressionType": "SIMPLE", "subject": "prices_as_of", "operator":
+  "TEMPORAL_RANGE", "comparator": "No filter", "clause": "WHERE", "sqlExpression":
+  null, "isExtra": false, "isNew": false, "datasourceWarning": false, "filterOptionName":
+  "filter_t_prices_as_of"}, {"expressionType": "SQL", "sqlExpression": "platforms_compared
+  >= 2", "clause": "WHERE", "subject": null, "operator": null, "comparator": null,
+  "isExtra": false, "isNew": false, "datasourceWarning": false, "filterOptionName":
+  "filter_platformscompa"}], "order_by_cols": ["[\"vs_competitor_median_pct\", true]"],
+  "order_desc": true, "server_pagination": false, "server_page_length": 10, "row_limit":
+  200, "percent_metric_calculation": "row_limit", "show_totals": false, "table_timestamp_format":
+  "smart_date", "include_search": true, "allow_rearrange_columns": false, "allow_render_html":
+  true, "column_config": {"Our recommended price": {"d3NumberFormat": ",d"}, "Min
+  market": {"d3NumberFormat": ",d"}, "vs median %": {"d3NumberFormat": ",.1f"}}, "show_cell_bars":
+  false, "align_pn": false, "color_pn": true, "comparison_color_enabled": false, "comparison_color_scheme":
+  "Green", "conditional_formatting": [], "comparison_type": "values", "extra_form_data":
+  {}, "dashboards": [], "page_length": 10}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: e2f3ee22-25cc-453d-b69a-ff276f0d6dcc
+version: 1.0.0
+dataset_uuid: f654657e-e0f6-4296-b6e4-0c8edf09b9f1

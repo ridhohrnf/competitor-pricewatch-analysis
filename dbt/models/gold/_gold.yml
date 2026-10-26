@@ -1,0 +1,157 @@
+version: 2
+
+models:
+  - name: dim_product_master
+    description: >
+      Grain: one row per canonical product. A product master groups the listings that
+      silver_product_match says are the same product (same brand, size, pack and variant,
+      or a reviewed seed mapping). Live and sample listings can share a master.
+      Matching internals (match key, base-unit size) stay in silver.
+    columns:
+      - name: product_master_key
+        description: >
+          Stable id of the product (md5 of the match key in silver). The only surrogate key
+          in gold: product names differ per platform, so there is no natural key to join on.
+        data_tests: [unique, not_null]
+      - name: canonical_name
+        description: Display name (live Tokopedia name first, then the shortest name).
+      - name: brand
+        data_tests: [not_null]
+      - name: category
+        description: From keyword rules on the name, falling back to the brand's category.
+      - name: size_value
+        description: Size as written on the listing (1.8 for "1.8 kg").
+      - name: size_unit
+        description: Unit as written (kg, gr, ml, L ...).
+      - name: pack_qty
+        data_tests: [not_null, positive_value]
+      - name: n_platforms_listed
+        description: On how many platforms this product was seen (cross-platform comparisons need 2+).
+      - name: data_origins
+        description: live, sample, or live,sample.
+      - name: is_bundle
+        description: True if any listing of this product is a bundle of several items.
+      - name: match_method
+        description: How the listings were grouped (reviewed seed, rule, or not matched).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['manual_seed', 'rule_key', 'singleton']
+
+  - name: dim_platform
+    description: "Grain: one row per platform, with its live-crawl status. Key: platform_code."
+    columns:
+      - name: platform_code
+        description: tokopedia, blibli or klikindomaret. Natural key, used by the facts.
+        data_tests:
+          - unique
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['tokopedia', 'klikindomaret', 'blibli']
+      - name: platform_name
+        description: Display name (Tokopedia, Blibli, Klik Indomaret).
+      - name: is_live_crawled
+        description: True if at least one live crawl of this platform succeeded.
+
+  - name: dim_date
+    description: >
+      Grain: one row per calendar day. Key: date. Indonesian retail calendar flags: weekend,
+      payday window (25th to 3rd) and twin-date sale days (9.9, 10.10 ...).
+    columns:
+      - name: date
+        description: Calendar day. Natural key, used by the facts.
+        data_tests: [unique, not_null]
+      - name: day_of_week
+        description: ISO day of week, 1 = Monday.
+        data_tests:
+          - value_between:
+              arguments: {min_value: 1, max_value: 7}
+
+  - name: fct_product_price_daily
+    description: >
+      Grain: one row per (price_date, listing). price_date is the Asia/Jakarta date; the price
+      is the last observation of that day. Joins: price_date → dim_date.date,
+      platform → dim_platform.platform_code, product_master_key → dim_product_master.
+      Incremental (merge on price_date + listing_key): every (day, listing) that received a new
+      raw row since the last build is recomputed in full, using raw.inserted_at as the watermark.
+    data_tests:
+      - unique_combination:
+          arguments:
+            combination: ['price_date', 'listing_key']
+    columns:
+      - name: price_date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date
+      - name: platform
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_platform')
+                field: platform_code
+      - name: product_master_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product_master')
+                field: product_master_key
+      - name: listing_key
+        description: platform:slug, the listing as the platform shows it.
+        data_tests: [not_null]
+      - name: price
+        description: Shelf price in IDR (last observation of the day).
+        data_tests: [not_null, positive_value]
+      - name: original_price
+        description: Strikethrough price in IDR (= price when there is no discount).
+        data_tests: [not_null, positive_value]
+      - name: discount_pct
+        description: Our discount, 0-100.
+        data_tests:
+          - value_between:
+              arguments: {min_value: 0, max_value: 100}
+      - name: n_observations
+        description: How many times the listing was seen that day.
+      - name: data_origin
+        description: live or sample. Every analysis and dashboard filters on it.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['live', 'sample']
+      - name: _max_inserted_at
+        description: Technical. Latest raw.inserted_at in this row's group; the incremental watermark.
+
+  - name: fct_crawl_run
+    description: >
+      Grain: one row per crawl run. Pipeline health: status, parse success rate, items
+      seen / valid / quarantined in silver. Read by the dashboard and the API's /health.
+    columns:
+      - name: run_id
+        data_tests: [unique, not_null]
+      - name: platform
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_platform')
+                field: platform_code
+      - name: run_date
+        description: Day the run started (Asia/Jakarta).
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['running', 'success', 'degraded', 'failed', 'blocked']
+      - name: parse_success_rate
+        data_tests:
+          - value_between:
+              arguments: {min_value: 0, max_value: 1}

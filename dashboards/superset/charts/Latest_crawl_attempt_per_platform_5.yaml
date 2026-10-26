@@ -1,0 +1,170 @@
+slice_name: Latest crawl attempt per platform
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 2__table
+  viz_type: table
+  matrixify_enable: false
+  matrixify_mode_columns: disabled
+  matrixify_dimension_selection_mode_columns: members
+  matrixify_dimension_columns:
+    dimension: ''
+    values: []
+  matrixify_topn_value_columns: 10
+  matrixify_all_sort_by_columns: a_to_z
+  matrixify_topn_order_columns: true
+  matrixify_show_column_headers: true
+  matrixify_fit_columns_dynamically: true
+  matrixify_mode_rows: disabled
+  matrixify_dimension_selection_mode_rows: members
+  matrixify_dimension_rows:
+    dimension: ''
+    values: []
+  matrixify_topn_value_rows: 10
+  matrixify_all_sort_by_rows: a_to_z
+  matrixify_topn_order_rows: true
+  matrixify_show_row_labels: true
+  matrixify_row_height: 300
+  matrixify_charts_per_row: 3
+  matrixify_cell_title_template: ''
+  query_mode: raw
+  groupby: []
+  time_grain_sqla: P1D
+  temporal_columns_lookup: {}
+  all_columns:
+  - label: Platform
+    sqlExpression: platform
+    expressionType: SQL
+  - label: Data source
+    sqlExpression: data_source
+    expressionType: SQL
+  - label: Status
+    sqlExpression: case status when 'OK' then '<span style="background:#dcfce7;color:#15803d;padding:3px
+      10px;border-radius:6px;font-weight:600;white-space:nowrap">OK</span>' else '<span
+      style="background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap">'
+      || status || '</span>' end
+    expressionType: SQL
+  - label: Started (WIB)
+    sqlExpression: to_char(started_at_wib, 'YYYY-MM-DD HH24:MI')
+    expressionType: SQL
+  - label: Hours ago
+    sqlExpression: hours_ago
+    expressionType: SQL
+  - label: Products found
+    sqlExpression: products_found
+    expressionType: SQL
+  - label: Valid
+    sqlExpression: products_valid
+    expressionType: SQL
+  - label: Quarantined
+    sqlExpression: products_quarantined
+    expressionType: SQL
+  - label: Note
+    sqlExpression: coalesce(error_message, '')
+    expressionType: SQL
+  percent_metrics: []
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: started_at_wib
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_t_started_at_wib
+  - expressionType: SQL
+    sqlExpression: is_latest_run = true
+    clause: WHERE
+    subject: null
+    operator: null
+    comparator: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_6343652319
+  order_by_cols:
+  - '["data_source", true]'
+  order_desc: true
+  server_pagination: false
+  server_page_length: 10
+  row_limit: 50
+  percent_metric_calculation: row_limit
+  show_totals: false
+  table_timestamp_format: smart_date
+  include_search: false
+  allow_rearrange_columns: false
+  allow_render_html: true
+  column_config:
+    Hours ago:
+      d3NumberFormat: ',.1f'
+  show_cell_bars: false
+  align_pn: false
+  color_pn: true
+  comparison_color_enabled: false
+  comparison_color_scheme: Green
+  conditional_formatting: []
+  comparison_type: values
+  extra_form_data: {}
+  dashboards: []
+  annotation_layers: []
+query_context: '{"datasource": {"id": 2, "type": "table"}, "force": false, "queries":
+  [{"filters": [{"col": "started_at_wib", "op": "TEMPORAL_RANGE", "val": "No filter"}],
+  "extras": {"having": "", "where": "(is_latest_run = true)"}, "columns": [{"label":
+  "Platform", "sqlExpression": "platform", "expressionType": "SQL"}, {"label": "Data
+  source", "sqlExpression": "data_source", "expressionType": "SQL"}, {"label": "Status",
+  "sqlExpression": "case status when ''OK'' then ''<span style=\"background:#dcfce7;color:#15803d;padding:3px
+  10px;border-radius:6px;font-weight:600;white-space:nowrap\">OK</span>'' else ''<span
+  style=\"background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap\">''
+  || status || ''</span>'' end", "expressionType": "SQL"}, {"label": "Started (WIB)",
+  "sqlExpression": "to_char(started_at_wib, ''YYYY-MM-DD HH24:MI'')", "expressionType":
+  "SQL"}, {"label": "Hours ago", "sqlExpression": "hours_ago", "expressionType": "SQL"},
+  {"label": "Products found", "sqlExpression": "products_found", "expressionType":
+  "SQL"}, {"label": "Valid", "sqlExpression": "products_valid", "expressionType":
+  "SQL"}, {"label": "Quarantined", "sqlExpression": "products_quarantined", "expressionType":
+  "SQL"}, {"label": "Note", "sqlExpression": "coalesce(error_message, '''')", "expressionType":
+  "SQL"}], "orderby": [["data_source", true]], "annotation_layers": [], "row_limit":
+  50, "order_desc": true}], "form_data": {"datasource": "2__table", "viz_type": "table",
+  "matrixify_enable": false, "matrixify_mode_columns": "disabled", "matrixify_dimension_selection_mode_columns":
+  "members", "matrixify_dimension_columns": {"dimension": "", "values": []}, "matrixify_topn_value_columns":
+  10, "matrixify_all_sort_by_columns": "a_to_z", "matrixify_topn_order_columns": true,
+  "matrixify_show_column_headers": true, "matrixify_fit_columns_dynamically": true,
+  "matrixify_mode_rows": "disabled", "matrixify_dimension_selection_mode_rows": "members",
+  "matrixify_dimension_rows": {"dimension": "", "values": []}, "matrixify_topn_value_rows":
+  10, "matrixify_all_sort_by_rows": "a_to_z", "matrixify_topn_order_rows": true, "matrixify_show_row_labels":
+  true, "matrixify_row_height": 300, "matrixify_charts_per_row": 3, "matrixify_cell_title_template":
+  "", "query_mode": "raw", "groupby": [], "time_grain_sqla": "P1D", "temporal_columns_lookup":
+  {}, "all_columns": [{"label": "Platform", "sqlExpression": "platform", "expressionType":
+  "SQL"}, {"label": "Data source", "sqlExpression": "data_source", "expressionType":
+  "SQL"}, {"label": "Status", "sqlExpression": "case status when ''OK'' then ''<span
+  style=\"background:#dcfce7;color:#15803d;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap\">OK</span>''
+  else ''<span style=\"background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:6px;font-weight:600;white-space:nowrap\">''
+  || status || ''</span>'' end", "expressionType": "SQL"}, {"label": "Started (WIB)",
+  "sqlExpression": "to_char(started_at_wib, ''YYYY-MM-DD HH24:MI'')", "expressionType":
+  "SQL"}, {"label": "Hours ago", "sqlExpression": "hours_ago", "expressionType": "SQL"},
+  {"label": "Products found", "sqlExpression": "products_found", "expressionType":
+  "SQL"}, {"label": "Valid", "sqlExpression": "products_valid", "expressionType":
+  "SQL"}, {"label": "Quarantined", "sqlExpression": "products_quarantined", "expressionType":
+  "SQL"}, {"label": "Note", "sqlExpression": "coalesce(error_message, '''')", "expressionType":
+  "SQL"}], "percent_metrics": [], "adhoc_filters": [{"expressionType": "SIMPLE", "subject":
+  "started_at_wib", "operator": "TEMPORAL_RANGE", "comparator": "No filter", "clause":
+  "WHERE", "sqlExpression": null, "isExtra": false, "isNew": false, "datasourceWarning":
+  false, "filterOptionName": "filter_t_started_at_wib"}, {"expressionType": "SQL",
+  "sqlExpression": "is_latest_run = true", "clause": "WHERE", "subject": null, "operator":
+  null, "comparator": null, "isExtra": false, "isNew": false, "datasourceWarning":
+  false, "filterOptionName": "filter_6343652319"}], "order_by_cols": ["[\"data_source\",
+  true]"], "order_desc": true, "server_pagination": false, "server_page_length": 10,
+  "row_limit": 50, "percent_metric_calculation": "row_limit", "show_totals": false,
+  "table_timestamp_format": "smart_date", "include_search": false, "allow_rearrange_columns":
+  false, "allow_render_html": true, "column_config": {"Hours ago": {"d3NumberFormat":
+  ",.1f"}}, "show_cell_bars": false, "align_pn": false, "color_pn": true, "comparison_color_enabled":
+  false, "comparison_color_scheme": "Green", "conditional_formatting": [], "comparison_type":
+  "values", "extra_form_data": {}, "dashboards": []}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 1490dcd4-89bc-48b6-ba4c-b69c6c738f8e
+version: 1.0.0
+dataset_uuid: 4db5c66b-4b09-4066-b19f-7868104d0b62

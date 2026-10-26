@@ -1,0 +1,12 @@
+pricewatch:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5432') | as_number }}"
+      user: "{{ env_var('POSTGRES_USER', 'pricewatch') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD', 'pricewatch_dev') }}"
+      dbname: "{{ env_var('POSTGRES_DB', 'pricewatch') }}"
+      schema: public
+      threads: 4

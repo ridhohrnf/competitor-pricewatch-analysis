@@ -1,0 +1,5 @@
+# Bonus orchestrator, only in the "orchestrator" image. dagster-dbt 0.29 supports dbt-core >=1.7,<1.13.
+-r requirements.txt
+dagster==1.13.26
+dagster-webserver==1.13.26
+dagster-dbt==0.29.26

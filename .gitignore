@@ -1,0 +1,22 @@
+# Secrets
+.env
+
+# Scraped HTML and live data stay local (ToS)
+data/
+
+# Python / tools
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# dbt build output
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+
+# The take-home brief is confidential
+*.pdf
+dbt/target_proof/

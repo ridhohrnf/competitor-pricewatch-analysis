@@ -1,0 +1,29 @@
+tokopedia:
+  page_urls:
+    first: https://www.tokopedia.com/unilever-official-store/product
+    next: https://www.tokopedia.com/unilever-official-store/product/page/{page}
+  page_size: 80
+  min_items_expected: 40
+  strategies:
+    - name: apollo_cache
+      type: apollo
+      marker: "window.__cache"
+      item_typename: ShopProductListDetail
+      id_from_url_pattern: '/([^/]+)$'
+      fields:
+        source_product_id: product_id
+        name: name
+        price_text: price.text_idr
+        original_price_text: campaign.original_price_fmt
+        source_discounted_percentage: campaign.discounted_percentage
+        source_url: product_url
+        rating: stats.averageRating
+        review_count: stats.reviewCount
+        image_url: primary_image.original
+    - name: dom_semantic
+      type: dom
+      card_anchor: 'img[alt="product-image"]'
+      link_selector: 'a[href*="/unilever-official-store/"]'
+      price_pattern: '^Rp\s?[\d.]+$'
+      discount_pattern: '^\d{1,2}%$'
+      id_from_url_pattern: '/([^/]+)$'

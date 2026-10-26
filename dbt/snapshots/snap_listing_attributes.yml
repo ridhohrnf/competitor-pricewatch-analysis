@@ -1,0 +1,20 @@
+snapshots:
+  - name: snap_listing_attributes
+    description: >
+      SCD Type 2 history of listing attributes. Every `dbt build` compares the current
+      silver_listing_attributes with the last version; when the name, brand, size, pack or
+      category of a listing changes, the old row is closed (dbt_valid_to) and a new one opens.
+    relation: ref('silver_listing_attributes')
+    config:
+      schema: snapshots
+      unique_key: listing_key
+      strategy: check
+      check_cols: [listing_name, brand, size_base, pack_qty, category]
+      hard_deletes: ignore
+    columns:
+      - name: listing_key
+        description: platform:external_product_id
+      - name: dbt_valid_from
+        description: When this version of the attributes was first seen by a snapshot.
+      - name: dbt_valid_to
+        description: When it was replaced (null = current version).

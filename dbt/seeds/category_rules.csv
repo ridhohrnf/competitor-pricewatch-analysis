@@ -1,0 +1,8 @@
+priority,pattern,category
+1,cuci piring|pencuci piring|dishwash,Dishwashing
+2,deterjen|detergen|\mdet\M|pewangi|pelembut|softener|sekali bilas|1x bilas,Laundry
+3,lantai|karbol|porselen|kamar mandi|serbaguna|toilet|kaca,Household Cleaning
+4,pasta gigi|sikat gigi|toothpaste,Oral Care
+5,shampoo|sampo|\mshp\M|kondisioner|conditioner,Hair Care
+6,sabun mandi|sabun batang|body ?wash|hand ?wash|cuci tangan,Personal Care
+7,kecap|kaldu|bumbu,Foods

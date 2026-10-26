@@ -1,0 +1,409 @@
+dashboard_title: Retail Pricing Intelligence
+description: null
+css: "/* page */\n.dashboard, .dashboard-content, .grid-container { background: #f1f4f9\
+  \ !important; }\n\n/* dashboard title */\n.dashboard-header-container .ant-input,\
+  \ .dashboard-header-container .input-sizer,\n.dashboard-header-container .editable-title\
+  \ { font-size: 28px !important; font-weight: 700 !important; color: #0f172a !important;\
+  \ }\n\n/* cards */\n.dashboard-component-chart-holder, .dashboard-markdown {\n \
+  \ background: #ffffff !important; border: 1px solid #e2e8f0 !important;\n  border-radius:\
+  \ 12px !important; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06) !important;\n}\n\
+  .dashboard-component-chart-holder .header-title { font-size: 16px !important; font-weight:\
+  \ 700 !important; color: #0f172a !important; }\n.dashboard-markdown h2 { font-size:\
+  \ 20px !important; font-weight: 700 !important; color: #0f172a !important; }\n.dashboard-markdown,\
+  \ .dashboard-markdown p { color: #475569 !important; }\n.dashboard-markdown strong\
+  \ { color: #0f172a !important; }\n\n/* KPI cards: small muted label, big coloured\
+  \ number (matched by chart name: ids change on import) */\n[data-test-chart-name=\"\
+  Records in last successful crawl\"] .header-title, [data-test-chart-name=\"Last\
+  \ successful crawl\"] .header-title, [data-test-chart-name=\"Hours since last successful\
+  \ crawl\"] .header-title {\n  font-size: 14px !important; font-weight: 400 !important;\
+  \ color: #64748b !important;\n}\n[data-test-chart-name=\"Records in last successful\
+  \ crawl\"] .header-line, [data-test-chart-name=\"Hours since last successful crawl\"\
+  ] .header-line { font-weight: 700 !important; }\n[data-test-chart-name=\"Records\
+  \ in last successful crawl\"] .header-line { color: #16a34a !important; }\n[data-test-chart-name=\"\
+  Hours since last successful crawl\"] .header-line { color: #0284c7 !important; }\n\
+  /* first KPI is a one-row table: the header stays in the layout (Superset measures\
+  \ it before showing the table), just invisible */\n.dashboard-component-chart-holder\
+  \ [data-test-chart-name=\"Last successful crawl\"] table.table thead th { height:\
+  \ 0 !important; padding: 0 !important; border: 0 !important; font-size: 0 !important;\
+  \ line-height: 0 !important; opacity: 0 !important; }\n.dashboard-component-chart-holder\
+  \ [data-test-chart-name=\"Last successful crawl\"] table.table tbody tr:not(:first-child)\
+  \ { display: none !important; }\n.dashboard-component-chart-holder [data-test-chart-name=\"\
+  Last successful crawl\"] table.table td { font-size: 34px !important; font-weight:\
+  \ 700 !important; color: #2563eb !important; border: 0 !important; padding: 18px\
+  \ 6px !important; }\n\n/* KPI values centred in their cards */\n[data-test-chart-name=\"\
+  Records in last successful crawl\"] .superset-legacy-chart-big-number, [data-test-chart-name=\"\
+  Hours since last successful crawl\"] .superset-legacy-chart-big-number {\n  display:\
+  \ flex !important; flex-direction: column !important; align-items: center !important;\
+  \ justify-content: center !important; text-align: center !important;\n}\n[data-test-chart-name=\"\
+  Records in last successful crawl\"] .header-line, [data-test-chart-name=\"Hours\
+  \ since last successful crawl\"] .header-line { width: 100% !important; text-align:\
+  \ center !important; }\n.dashboard-component-chart-holder [data-test-chart-name=\"\
+  Last successful crawl\"] table.table { width: 100% !important; }\n.dashboard-component-chart-holder\
+  \ [data-test-chart-name=\"Last successful crawl\"] table.table td { text-align:\
+  \ center !important; }\n\n/* tables: no heavy cells, thin row separators */\n.dashboard-component-chart-holder\
+  \ table.table { background: transparent !important; }\n.dashboard-component-chart-holder\
+  \ table.table th {\n  background: transparent !important; color: #475569 !important;\
+  \ font-weight: 700 !important;\n  border: 0 !important; border-bottom: 1px solid\
+  \ #e2e8f0 !important; padding: 12px 10px !important;\n}\n.dashboard-component-chart-holder\
+  \ table.table td {\n  background: transparent !important; color: #0f172a !important;\
+  \ border: 0 !important;\n  border-bottom: 1px solid #edf1f6 !important; padding:\
+  \ 11px 10px !important;\n}\n.dashboard-component-chart-holder table.table tbody\
+  \ tr,\n.dashboard-component-chart-holder table.table.table-striped > tbody > tr:nth-of-type(odd),\n\
+  .dashboard-component-chart-holder table.table.table-striped > tbody > tr:nth-of-type(even)\
+  \ { background: transparent !important; }\n.dashboard-component-chart-holder table.table\
+  \ tbody tr:hover td { background: rgba(15, 23, 42, 0.04) !important; }\n\n/* table\
+  \ search and page-size inputs */\n.dashboard-component-chart-holder select, .dashboard-component-chart-holder\
+  \ input[type=\"search\"],\n.dashboard-component-chart-holder input.form-control\
+  \ {\n  background: #ffffff !important; color: #0f172a !important; border: 1px solid\
+  \ #cbd5e1 !important; border-radius: 8px !important;\n}\n"
+slug: null
+certified_by: ''
+certification_details: ''
+published: true
+uuid: 35c77334-933d-40ac-988a-a92682d22157
+position:
+  CHART-10:
+    children: []
+    id: CHART-10
+    meta:
+      chartId: 4
+      height: 26
+      sliceName: Last successful crawl
+      uuid: 995e4fff-4f57-4f7e-85be-660d46e17dea
+      width: 6
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-kpi
+    type: CHART
+  CHART-11:
+    children: []
+    id: CHART-11
+    meta:
+      chartId: 3
+      height: 26
+      sliceName: Hours since last successful crawl
+      uuid: d556568c-0156-4f98-a0a6-c8a789198cd6
+      width: 3
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-kpi
+    type: CHART
+  CHART-12:
+    children: []
+    id: CHART-12
+    meta:
+      chartId: 5
+      height: 34
+      sliceName: Latest crawl attempt per platform
+      uuid: 1490dcd4-89bc-48b6-ba4c-b69c6c738f8e
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-health
+    type: CHART
+  CHART-13:
+    children: []
+    id: CHART-13
+    meta:
+      chartId: 7
+      height: 60
+      sliceName: Recommendations vs market minimum
+      uuid: e2f3ee22-25cc-453d-b69a-ff276f0d6dcc
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-reco
+    type: CHART
+  CHART-14:
+    children: []
+    id: CHART-14
+    meta:
+      chartId: 6
+      height: 60
+      sliceName: Price comparison per product (with our recommended price)
+      uuid: 78801d1b-552d-449c-acf4-3267431ce8da
+      width: 6
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-charts
+    type: CHART
+  CHART-15:
+    children: []
+    id: CHART-15
+    meta:
+      chartId: 1
+      height: 60
+      sliceName: Average discount by day of week (%)
+      uuid: 5cb02298-84d6-46ce-bab4-39aedc5211d9
+      width: 6
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-charts
+    type: CHART
+  CHART-9:
+    children: []
+    id: CHART-9
+    meta:
+      chartId: 8
+      height: 26
+      sliceName: Records in last successful crawl
+      uuid: 74e7c5fb-ffdc-44c1-bbda-2a110d78b1e9
+      width: 3
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-kpi
+    type: CHART
+  CHART-IPY1XLWL:
+    children: []
+    id: CHART-IPY1XLWL
+    meta:
+      chartId: 2
+      height: 50
+      sliceName: Average discount per day, sample data (%)
+      uuid: 7ed0b021-2376-4933-bc80-9da105504917
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-3EYQ4EIN-WMMFx2Hps5vH
+    type: CHART
+  DASHBOARD_VERSION_KEY: v2
+  GRID_ID:
+    children:
+    - ROW-note
+    - ROW-kpi
+    - ROW-reco
+    - ROW-charts
+    - ROW-3EYQ4EIN-WMMFx2Hps5vH
+    - ROW-health
+    id: GRID_ID
+    parents:
+    - ROOT_ID
+    type: GRID
+  HEADER_ID:
+    id: HEADER_ID
+    meta:
+      text: Retail Pricing Intelligence
+    type: HEADER
+  MARKDOWN-note:
+    children: []
+    id: MARKDOWN-note
+    meta:
+      code: '## Retail Pricing Intelligence - Unilever products
+
+
+        Live data is Tokopedia only. The health tile shows the **latest crawl attempt**,
+        including blocked ones; the KPIs above it use the **last successful** crawl.
+        Blibli, Klik Indomaret and all price history are **synthetic sample data**.
+        "Our price" is our **recommended** price (no current XYZ price data).'
+      height: 17
+      width: 12
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-note
+    type: MARKDOWN
+  ROOT_ID:
+    children:
+    - GRID_ID
+    id: ROOT_ID
+    type: ROOT
+  ROW-3EYQ4EIN-WMMFx2Hps5vH:
+    children:
+    - CHART-IPY1XLWL
+    id: ROW-3EYQ4EIN-WMMFx2Hps5vH
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: ROW
+  ROW-charts:
+    children:
+    - CHART-14
+    - CHART-15
+    id: ROW-charts
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: ROW
+  ROW-health:
+    children:
+    - CHART-12
+    id: ROW-health
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: ROW
+  ROW-kpi:
+    children:
+    - CHART-10
+    - CHART-11
+    - CHART-9
+    id: ROW-kpi
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: ROW
+  ROW-note:
+    children:
+    - MARKDOWN-note
+    id: ROW-note
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: ROW
+  ROW-reco:
+    children:
+    - CHART-13
+    id: ROW-reco
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    type: ROW
+metadata:
+  color_scheme: supersetColors
+  refresh_frequency: 0
+  expanded_slices: {}
+  timed_refresh_immune_slices: []
+  chart_configuration:
+    '1':
+      id: 1
+      crossFilters:
+        scope: global
+        chartsInScope:
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+    '2':
+      id: 2
+      crossFilters:
+        scope: global
+        chartsInScope:
+        - 1
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+    '4':
+      id: 4
+      crossFilters:
+        scope: global
+        chartsInScope:
+        - 1
+        - 2
+        - 3
+        - 5
+        - 6
+        - 7
+        - 8
+    '5':
+      id: 5
+      crossFilters:
+        scope: global
+        chartsInScope:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 6
+        - 7
+        - 8
+    '6':
+      id: 6
+      crossFilters:
+        scope: global
+        chartsInScope:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 7
+        - 8
+    '7':
+      id: 7
+      crossFilters:
+        scope: global
+        chartsInScope:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 8
+  shared_label_colors:
+  - Blibli
+  - Klik Indomaret
+  - Tokopedia
+  label_colors:
+    XYZ (recommended): '#3B82F6'
+    Tokopedia: '#10B981'
+    Blibli: '#06B6D4'
+    Klik Indomaret: '#F59E0B'
+  map_label_colors: {}
+  color_scheme_domain:
+  - '#1FA8C9'
+  - '#454E7C'
+  - '#5AC189'
+  - '#FF7F44'
+  - '#666666'
+  - '#E04355'
+  - '#FCC700'
+  - '#A868B7'
+  - '#3CCCCB'
+  - '#A38F79'
+  - '#8FD3E4'
+  - '#A1A6BD'
+  - '#ACE1C4'
+  - '#FEC0A1'
+  - '#B2B2B2'
+  - '#EFA1AA'
+  - '#FDE380'
+  - '#D3B3DA'
+  - '#9EE5E5'
+  - '#D1C6BC'
+  cross_filters_enabled: true
+  global_chart_configuration:
+    scope:
+      rootPath:
+      - ROOT_ID
+      excluded: []
+    chartsInScope:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+  native_filter_configuration: []
+  chart_customization_config: []
+  default_filters: '{}'
+theme_uuid: 45e8ab79-5ab9-4850-aeac-5cffbf964f34
+version: 1.0.0

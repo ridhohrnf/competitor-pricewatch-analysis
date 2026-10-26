@@ -1,0 +1,206 @@
+slice_name: Price comparison per product (with our recommended price)
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 3__table
+  viz_type: echarts_timeseries_bar
+  slice_id: 14
+  matrixify_enable: false
+  matrixify_mode_columns: disabled
+  matrixify_dimension_selection_mode_columns: members
+  matrixify_dimension_columns:
+    dimension: ''
+    values: []
+  matrixify_topn_value_columns: 10
+  matrixify_all_sort_by_columns: a_to_z
+  matrixify_topn_order_columns: true
+  matrixify_show_column_headers: true
+  matrixify_fit_columns_dynamically: true
+  matrixify_mode_rows: disabled
+  matrixify_dimension_selection_mode_rows: members
+  matrixify_dimension_rows:
+    dimension: ''
+    values: []
+  matrixify_topn_value_rows: 10
+  matrixify_all_sort_by_rows: a_to_z
+  matrixify_topn_order_rows: true
+  matrixify_show_row_labels: true
+  matrixify_row_height: 300
+  matrixify_charts_per_row: 4
+  matrixify_cell_title_template: ''
+  x_axis:
+    expressionType: SQL
+    label: Product
+    sqlExpression: brand || ' ' || pack_size
+  metrics:
+  - expressionType: SQL
+    sqlExpression: MAX(recommended_price_idr)
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: XYZ (recommended)
+    optionName: metric_XYZrecommended
+  - expressionType: SQL
+    sqlExpression: MAX(tokopedia_price_idr)
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: Tokopedia
+    optionName: metric_Tokopedia
+  - expressionType: SQL
+    sqlExpression: MAX(blibli_price_idr)
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: Blibli
+    optionName: metric_Blibli
+  - expressionType: SQL
+    sqlExpression: MAX(klikindomaret_price_idr)
+    column: null
+    aggregate: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: Klik Indomaret
+    optionName: metric_KlikIndomaret
+  groupby: []
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: prices_as_of
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_t_prices_as_of
+  - expressionType: SQL
+    sqlExpression: data_source = 'Sample (synthetic)' AND platforms_compared = 3 AND
+      price_gap_pct >= 14
+    clause: WHERE
+    subject: null
+    operator: null
+    comparator: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_datasourceSamp
+  row_limit: 50
+  truncate_metric: true
+  show_empty_columns: true
+  comparison_type: values
+  annotation_layers: []
+  forecastEnabled: false
+  forecastPeriods: 10
+  forecastInterval: 0.8
+  orientation: vertical
+  x_axis_title: ''
+  x_axis_title_margin: 0
+  y_axis_title: ''
+  y_axis_title_margin: 0
+  y_axis_title_position: Left
+  sort_series_type: sum
+  sort_series_ascending: false
+  color_scheme: supersetColors
+  show_value: false
+  stack: null
+  minorTicks: false
+  zoomable: false
+  show_legend: true
+  legendType: scroll
+  legendOrientation: top
+  x_axis_time_format: smart_date
+  x_axis_number_format: ~g
+  xAxisLabelRotation: 0
+  xAxisLabelInterval: 0
+  y_axis_format: ',d'
+  logAxis: false
+  minorSplitLine: false
+  truncateYAxis: false
+  y_axis_bounds:
+  - null
+  - null
+  truncateXAxis: true
+  rich_tooltip: true
+  showTooltipTotal: true
+  showTooltipPercentage: false
+  tooltipSortByMetric: false
+  tooltipTimeFormat: smart_date
+  echart_options: '{}'
+  extra_form_data: {}
+  dashboards:
+  - 2
+  xAxisForceCategorical: true
+  time_grain_sqla: null
+query_context: '{"datasource": {"id": 3, "type": "table"}, "force": false, "queries":
+  [{"filters": [{"col": "prices_as_of", "op": "TEMPORAL_RANGE", "val": "No filter"}],
+  "extras": {"having": "", "where": "(data_source = ''Sample (synthetic)'' AND platforms_compared
+  = 3 AND price_gap_pct >= 14)"}, "applied_time_extras": {}, "columns": [{"columnType":
+  "BASE_AXIS", "sqlExpression": "brand || '' '' || pack_size", "label": "Product",
+  "expressionType": "SQL"}], "metrics": [{"expressionType": "SQL", "sqlExpression":
+  "MAX(recommended_price_idr)", "column": null, "aggregate": null, "datasourceWarning":
+  false, "hasCustomLabel": true, "label": "XYZ (recommended)", "optionName": "metric_XYZrecommended"},
+  {"expressionType": "SQL", "sqlExpression": "MAX(tokopedia_price_idr)", "column":
+  null, "aggregate": null, "datasourceWarning": false, "hasCustomLabel": true, "label":
+  "Tokopedia", "optionName": "metric_Tokopedia"}, {"expressionType": "SQL", "sqlExpression":
+  "MAX(blibli_price_idr)", "column": null, "aggregate": null, "datasourceWarning":
+  false, "hasCustomLabel": true, "label": "Blibli", "optionName": "metric_Blibli"},
+  {"expressionType": "SQL", "sqlExpression": "MAX(klikindomaret_price_idr)", "column":
+  null, "aggregate": null, "datasourceWarning": false, "hasCustomLabel": true, "label":
+  "Klik Indomaret", "optionName": "metric_KlikIndomaret"}], "orderby": [[{"expressionType":
+  "SQL", "sqlExpression": "MAX(recommended_price_idr)", "column": null, "aggregate":
+  null, "datasourceWarning": false, "hasCustomLabel": true, "label": "XYZ (recommended)",
+  "optionName": "metric_XYZrecommended"}, false]], "annotation_layers": [], "row_limit":
+  50, "series_columns": [], "group_others_when_limit_reached": false, "order_desc":
+  true, "url_params": {}, "custom_params": {}, "custom_form_data": {}, "time_offsets":
+  [], "post_processing": []}], "form_data": {"datasource": "3__table", "viz_type":
+  "echarts_timeseries_bar", "slice_id": 14, "matrixify_enable": false, "matrixify_mode_columns":
+  "disabled", "matrixify_dimension_selection_mode_columns": "members", "matrixify_dimension_columns":
+  {"dimension": "", "values": []}, "matrixify_topn_value_columns": 10, "matrixify_all_sort_by_columns":
+  "a_to_z", "matrixify_topn_order_columns": true, "matrixify_show_column_headers":
+  true, "matrixify_fit_columns_dynamically": true, "matrixify_mode_rows": "disabled",
+  "matrixify_dimension_selection_mode_rows": "members", "matrixify_dimension_rows":
+  {"dimension": "", "values": []}, "matrixify_topn_value_rows": 10, "matrixify_all_sort_by_rows":
+  "a_to_z", "matrixify_topn_order_rows": true, "matrixify_show_row_labels": true,
+  "matrixify_row_height": 300, "matrixify_charts_per_row": 4, "matrixify_cell_title_template":
+  "", "x_axis": {"expressionType": "SQL", "label": "Product", "sqlExpression": "brand
+  || '' '' || pack_size"}, "metrics": [{"expressionType": "SQL", "sqlExpression":
+  "MAX(recommended_price_idr)", "column": null, "aggregate": null, "datasourceWarning":
+  false, "hasCustomLabel": true, "label": "XYZ (recommended)", "optionName": "metric_XYZrecommended"},
+  {"expressionType": "SQL", "sqlExpression": "MAX(tokopedia_price_idr)", "column":
+  null, "aggregate": null, "datasourceWarning": false, "hasCustomLabel": true, "label":
+  "Tokopedia", "optionName": "metric_Tokopedia"}, {"expressionType": "SQL", "sqlExpression":
+  "MAX(blibli_price_idr)", "column": null, "aggregate": null, "datasourceWarning":
+  false, "hasCustomLabel": true, "label": "Blibli", "optionName": "metric_Blibli"},
+  {"expressionType": "SQL", "sqlExpression": "MAX(klikindomaret_price_idr)", "column":
+  null, "aggregate": null, "datasourceWarning": false, "hasCustomLabel": true, "label":
+  "Klik Indomaret", "optionName": "metric_KlikIndomaret"}], "groupby": [], "adhoc_filters":
+  [{"expressionType": "SIMPLE", "subject": "prices_as_of", "operator": "TEMPORAL_RANGE",
+  "comparator": "No filter", "clause": "WHERE", "sqlExpression": null, "isExtra":
+  false, "isNew": false, "datasourceWarning": false, "filterOptionName": "filter_t_prices_as_of"},
+  {"expressionType": "SQL", "sqlExpression": "data_source = ''Sample (synthetic)''
+  AND platforms_compared = 3 AND price_gap_pct >= 14", "clause": "WHERE", "subject":
+  null, "operator": null, "comparator": null, "isExtra": false, "isNew": false, "datasourceWarning":
+  false, "filterOptionName": "filter_datasourceSamp"}], "row_limit": 50, "truncate_metric":
+  true, "show_empty_columns": true, "comparison_type": "values", "annotation_layers":
+  [], "forecastEnabled": false, "forecastPeriods": 10, "forecastInterval": 0.8, "orientation":
+  "vertical", "x_axis_title": "", "x_axis_title_margin": 0, "y_axis_title": "", "y_axis_title_margin":
+  0, "y_axis_title_position": "Left", "sort_series_type": "sum", "sort_series_ascending":
+  false, "color_scheme": "supersetColors", "show_value": false, "stack": null, "minorTicks":
+  false, "zoomable": false, "show_legend": true, "legendType": "scroll", "legendOrientation":
+  "top", "x_axis_time_format": "smart_date", "x_axis_number_format": "~g", "xAxisLabelRotation":
+  0, "xAxisLabelInterval": 0, "y_axis_format": ",d", "logAxis": false, "minorSplitLine":
+  false, "truncateYAxis": false, "y_axis_bounds": [null, null], "truncateXAxis": true,
+  "rich_tooltip": true, "showTooltipTotal": true, "showTooltipPercentage": false,
+  "tooltipSortByMetric": false, "tooltipTimeFormat": "smart_date", "echart_options":
+  "{}", "extra_form_data": {}, "dashboards": [2], "xAxisForceCategorical": true, "time_grain_sqla":
+  null}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 78801d1b-552d-449c-acf4-3267431ce8da
+version: 1.0.0
+dataset_uuid: f654657e-e0f6-4296-b6e4-0c8edf09b9f1

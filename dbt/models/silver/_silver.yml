@@ -1,0 +1,194 @@
+version: 2
+
+models:
+  - name: stg_crawl_run
+    description: raw.crawl_run with nulls in counters replaced by 0. View.
+    columns:
+      - name: run_id
+        data_tests: [unique, not_null]
+
+  - name: stg_product_listing
+    description: >
+      raw.product_listing flattened (payload -> columns) with prices parsed from text by the
+      parse_idr macro ("Rp24.200" -> 24200; anything else -> null). Keeps every raw row. View.
+    columns:
+      - name: raw_id
+        data_tests: [unique, not_null]
+      - name: listing_key
+        description: "platform:external_product_id, the listing's id across the warehouse."
+        data_tests: [not_null]
+      - name: price
+        description: Shelf price in IDR, parsed from price_text (null if unparseable).
+      - name: original_price_shown
+        description: Strikethrough price in IDR when the site shows one.
+
+  - name: int_listing_checked
+    description: >
+      Every raw row enriched with brand (first brand mentioned, seed unilever_brands),
+      category (keyword rules, brand default as fallback), our own discount_pct, and the
+      quarantine decision reject_reason (null = accepted).
+    columns:
+      - name: raw_id
+        data_tests: [unique, not_null]
+      - name: reject_reason
+        description: Why silver does not use the row; null when it is accepted.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['contract_invalid', 'price_unparseable', 'giveaway_item',
+                         'bundle_without_brand', 'not_unilever_brand', 'original_below_price']
+      - name: discount_pct
+        description: (original_price - price) / original_price * 100, computed by us.
+        data_tests:
+          - value_between:
+              arguments: {min_value: 0, max_value: 100}
+
+  - name: silver_rejected_listing
+    description: >
+      Quarantine: raw rows silver will not use, with the reason. Nothing is
+      dropped silently; counts per run feed gold.fct_crawl_run and the health panel.
+    columns:
+      - name: raw_id
+        data_tests: [unique, not_null]
+      - name: reject_reason
+        data_tests: [not_null]
+
+  - name: silver_price_observation
+    description: >
+      Clean observations: accepted rows, Unilever brands only, one per (listing, crawled_at).
+      Prices are numbers; discount_pct is ours (the source's discount field is "0" on all 346
+      live Tokopedia products although the page shows a discount).
+    data_tests:
+      - unique_combination:
+          arguments:
+            combination: ['listing_key', 'crawled_at']
+    columns:
+      - name: raw_id
+        data_tests: [unique, not_null]
+      - name: brand
+        data_tests: [not_null]
+      - name: price
+        data_tests: [not_null, positive_value]
+      - name: original_price
+        data_tests: [not_null, positive_value]
+      - name: discount_pct
+        data_tests:
+          - value_between:
+              arguments: {min_value: 0, max_value: 100}
+      - name: data_origin
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['live', 'sample']
+
+  - name: silver_listing_attributes
+    description: >
+      One row per listing from its latest observation: brand, category, size (parse_pack_size
+      macro), pack count, variant words (core_tokens) and the rule-based match_key
+      brand|size+unit|x pack|core_tokens. Source of the SCD2 snapshot.
+    columns:
+      - name: listing_key
+        data_tests: [unique, not_null]
+      - name: size_base
+        description: Size in the base unit (ml or g); 1.8 kg -> 1800 g. Null when the name has no size.
+      - name: pack_qty
+        description: Units in the pack ("isi 4", "3X190GR", "twinpack"); 1 when not stated.
+        data_tests: [not_null, positive_value]
+      - name: match_key
+        data_tests: [not_null]
+
+  - name: silver_product_match
+    description: >
+      listing -> product master. match_method: manual_seed (a reviewed mapping), rule_key
+      (same match_key on 2+ platforms) or singleton (one platform only).
+    columns:
+      - name: listing_key
+        data_tests: [unique, not_null]
+      - name: product_master_key
+        data_tests: [not_null]
+      - name: match_method
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['manual_seed', 'rule_key', 'singleton']
+
+unit_tests:
+  - name: rupiah_text_becomes_a_number_and_junk_becomes_null
+    model: stg_product_listing
+    given:
+      - input: source('raw', 'product_listing')
+        rows:
+          - {id: 1, platform: tokopedia, external_product_id: a, payload: '{"price_text": "Rp24.200", "original_price_text": "Rp33.900"}'}
+          - {id: 2, platform: klikindomaret, external_product_id: b, payload: '{"price_text": "Rp 1.234.567"}'}
+          - {id: 3, platform: blibli, external_product_id: c, payload: '{"price_text": "Rp -"}'}
+          - {id: 4, platform: blibli, external_product_id: d, payload: '{"price_text": "24.200"}'}
+    expect:
+      rows:
+        - {raw_id: 1, listing_key: "tokopedia:a", price: 24200, original_price_shown: 33900}
+        - {raw_id: 2, listing_key: "klikindomaret:b", price: 1234567, original_price_shown: null}
+        - {raw_id: 3, listing_key: "blibli:c", price: null, original_price_shown: null}
+        - {raw_id: 4, listing_key: "blibli:d", price: null, original_price_shown: null}
+
+  - name: discount_is_computed_and_rows_are_quarantined_with_a_reason
+    model: int_listing_checked
+    given:
+      - input: ref('stg_product_listing')
+        rows:
+          - {raw_id: 1, is_valid: true, listing_name: "Super Pell Pembersih Lantai 770ml", price: 12000, original_price_shown: 16000, source_discount_text: "0"}
+          - {raw_id: 2, is_valid: true, listing_name: "GIVEAWAY! Contoh Hadiah", price: 1000, original_price_shown: null}
+          - {raw_id: 3, is_valid: true, listing_name: "So Klin Pewangi 900 ml", price: 14900, original_price_shown: null}
+          - {raw_id: 4, is_valid: false, listing_name: "Rinso 770g", price: null, original_price_shown: null}
+          - {raw_id: 5, is_valid: true, listing_name: "Super Pell Luxurious Contoh 760ml", price: 30000, original_price_shown: 20000}
+      - input: ref('unilever_brands')
+        rows:
+          - {brand: Super Pell, brand_slug: superpell, alias_regex: '\msuper ?pell\M', default_category: Household Cleaning}
+          - {brand: Rinso, brand_slug: rinso, alias_regex: '\mrinso\M', default_category: Laundry}
+          - {brand: Lux, brand_slug: lux, alias_regex: '\mlux\M', default_category: Personal Care}
+      - input: ref('category_rules')
+        rows:
+          - {priority: 3, pattern: lantai, category: Household Cleaning}
+    expect:
+      rows:
+        - {raw_id: 1, brand: Super Pell, discount_pct: "25.00", is_discounted: true, source_discount_mismatch: true, reject_reason: null}
+        - {raw_id: 2, brand: null, discount_pct: 0, is_discounted: false, source_discount_mismatch: false, reject_reason: giveaway_item}
+        - {raw_id: 3, brand: null, discount_pct: 0, is_discounted: false, source_discount_mismatch: false, reject_reason: not_unilever_brand}
+        - {raw_id: 4, brand: Rinso, discount_pct: 0, is_discounted: false, source_discount_mismatch: false, reject_reason: contract_invalid}
+        - {raw_id: 5, brand: Super Pell, discount_pct: 0, is_discounted: false, source_discount_mismatch: false, reject_reason: original_below_price}
+
+  - name: size_and_pack_are_read_from_many_name_styles
+    model: silver_listing_attributes
+    given:
+      - input: ref('silver_price_observation')
+        rows:
+          - {listing_key: "t:1", platform: tokopedia, listing_name: "Rinso Anti Noda Deterjen Bubuk 1.8kg", brand: Rinso, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "b:1", platform: blibli, listing_name: "Rinso Anti Noda Deterjen Bubuk - 1,8 kg", brand: Rinso, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "k:1", platform: klikindomaret, listing_name: "RINSO DET BUBUK ANTI NODA 1.8KG", brand: Rinso, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "k:2", platform: klikindomaret, listing_name: "LIFEBUOY SABUN BATANG TOTAL10 4X110GR", brand: Lifebuoy, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "t:2", platform: tokopedia, listing_name: "Molto Contoh Pelembut 765ml Multipack Isi 12", brand: Molto, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "t:3", platform: tokopedia, listing_name: "Lifebuoy Sabun Batang Total 10 110g isi 4", brand: Lifebuoy, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "t:4", platform: tokopedia, listing_name: "Molto Contoh Blue 300ml Multipack 6 pcs", brand: Molto, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "t:5", platform: tokopedia, listing_name: "Cif Contoh Cream 660G 4PACK", brand: Cif, crawled_at: "2026-10-01 00:00:00+00"}
+          - {listing_key: "t:6", platform: tokopedia, listing_name: "Rinso Contoh Bubuk 1200g x4", brand: Rinso, crawled_at: "2026-10-01 00:00:00+00"}
+      - input: ref('unilever_brands')
+        rows:
+          - {brand: Rinso, brand_slug: rinso, alias_regex: '\mrinso\M'}
+          - {brand: Lifebuoy, brand_slug: lifebuoy, alias_regex: '\mlifebuoy\M'}
+          - {brand: Molto, brand_slug: molto, alias_regex: '\mmolto\M'}
+          - {brand: Cif, brand_slug: cif, alias_regex: '\mcif\M'}
+      - input: ref('token_rules')
+        rows:
+          - {token: det, canonical: deterjen}
+          - {token: sabun, canonical: "-"}
+          - {token: isi, canonical: "-"}
+          - {token: pcs, canonical: "-"}
+    expect:
+      rows:
+        - {listing_key: "t:1", size_base: 1800, base_unit: g, pack_qty: 1, match_key: "rinso|1800g|x1|anti bubuk deterjen noda"}
+        - {listing_key: "b:1", size_base: 1800, base_unit: g, pack_qty: 1, match_key: "rinso|1800g|x1|anti bubuk deterjen noda"}
+        - {listing_key: "k:1", size_base: 1800, base_unit: g, pack_qty: 1, match_key: "rinso|1800g|x1|anti bubuk deterjen noda"}
+        - {listing_key: "k:2", size_base: 110, base_unit: g, pack_qty: 4, match_key: "lifebuoy|110g|x4|batang total"}
+        - {listing_key: "t:2", size_base: 765, base_unit: ml, pack_qty: 12, match_key: "molto|765ml|x12|contoh multipack pelembut"}
+        - {listing_key: "t:3", size_base: 110, base_unit: g, pack_qty: 4, match_key: "lifebuoy|110g|x4|batang total"}
+        - {listing_key: "t:4", size_base: 300, base_unit: ml, pack_qty: 6, match_key: "molto|300ml|x6|blue contoh multipack"}
+        - {listing_key: "t:5", size_base: 660, base_unit: g, pack_qty: 4, match_key: "cif|660g|x4|contoh cream pack"}
+        - {listing_key: "t:6", size_base: 1200, base_unit: g, pack_qty: 4, match_key: "rinso|1200g|x4|bubuk contoh"}

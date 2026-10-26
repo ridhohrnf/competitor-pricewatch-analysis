@@ -1,0 +1,26 @@
+brand,brand_slug,alias_regex,default_category
+Rinso,rinso,\mrinso\M,Laundry
+Molto,molto,\mmolto\M,Laundry
+Sunlight,sunlight,\msunlight\M,Dishwashing
+Wipol,wipol,\mwipol\M,Household Cleaning
+Super Pell,superpell,\msuper ?pell\M,Household Cleaning
+Vixal,vixal,\mvixal\M,Household Cleaning
+Cif,cif,\mcif\M,Household Cleaning
+Domestos,domestos,\mdomestos\M,Household Cleaning
+Lifebuoy,lifebuoy,\mlifebuoy\M,Personal Care
+Lux,lux,\mlux\M,Personal Care
+Dove,dove,\mdove\M,Personal Care
+Pepsodent,pepsodent,\mpepsodent\M,Oral Care
+Close Up,closeup,\mclose ?up\M,Oral Care
+Sunsilk,sunsilk,\msunsilk\M,Hair Care
+Clear,clear,\mclear\M,Hair Care
+TRESemme,tresemme,\mtresemm,Hair Care
+Rexona,rexona,\mrexona\M,Deodorant
+Axe,axe,\maxe\M,Deodorant
+Vaseline,vaseline,\mvaseline\M,Skin Care
+Pond's,ponds,\mpond'?s\M,Skin Care
+Citra,citra,\mcitra\M,Skin Care
+Glow & Lovely,glowlovely,\mglow ?(&|and) ?lovely\M,Skin Care
+Zwitsal,zwitsal,\mzwitsal\M,Baby Care
+Royco,royco,\mroyco\M,Foods
+Bango,bango,\mbango\M,Foods

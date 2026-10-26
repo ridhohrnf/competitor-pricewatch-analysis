@@ -1,0 +1,44 @@
+version: 2
+
+seeds:
+  - name: unilever_brands
+    description: >
+      Unilever Indonesia brands and the regex that finds them in a product name (Postgres
+      word boundaries \m \M, so "lux" does not match "LUXURIOUS"). A listing whose name
+      matches no brand is quarantined as not_unilever_brand. Checked against the brands on
+      the live Tokopedia store on 2026-10-19 (Rinso, Molto, Sunlight, Vixal, Wipol, Cif,
+      Super Pell, Lifebuoy); brands Unilever sold or spun off (tea, ice cream) are left out.
+    config:
+      column_types: {brand: text, brand_slug: text, alias_regex: text, default_category: text}
+    columns:
+      - name: brand
+        data_tests: [unique, not_null]
+      - name: alias_regex
+        data_tests: [not_null]
+  - name: category_rules
+    description: >
+      Category from keywords in the name, checked in priority order; the brand's default
+      category is the fallback. Needed because one brand spans categories (Lifebuoy sells
+      soap and dishwashing liquid).
+    config:
+      column_types: {priority: integer, pattern: text, category: text}
+  - name: token_rules
+    description: >
+      Normalises words before building the matching key: abbreviations become the full word
+      ("det" -> "deterjen"), filler words ("refill", "botol", "isi") are dropped ("-").
+    config:
+      column_types: {token: text, canonical: text}
+  - name: dim_platform_seed
+    description: The three platforms in the brief.
+    config:
+      column_types: {platform_code: text, platform_name: text, base_url: text}
+  - name: product_mapping
+    description: >
+      Human decisions: "this listing is the same product as that listing", reviewed from the
+      fuzzy candidates in docs/match_candidates_sample.csv (scripts/suggest_matches.py). It
+      points at a listing, not at a key string, so it stays valid when matching rules change.
+    config:
+      column_types: {listing_key: text, same_as_listing_key: text, reviewed_by: text, note: text}
+    columns:
+      - name: listing_key
+        data_tests: [unique, not_null]

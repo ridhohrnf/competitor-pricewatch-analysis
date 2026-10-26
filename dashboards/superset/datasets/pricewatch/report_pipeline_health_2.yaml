@@ -1,0 +1,214 @@
+table_name: report_pipeline_health
+main_dttm_col: started_at_wib
+currency_code_column: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: null
+catalog: pricewatch
+schema: gold
+sql: null
+params: null
+template_params: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+folders: null
+uuid: 4db5c66b-4b09-4066-b19f-7868104d0b62
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: count
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+columns:
+- column_name: started_at_wib
+  verbose_name: null
+  is_dttm: true
+  is_active: true
+  type: TIMESTAMP(0) WITHOUT TIME ZONE
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: is_latest_run
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: BOOLEAN
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: products_quarantined
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: BIGINT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: parse_success_pct
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: NUMERIC
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: hours_ago
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: NUMERIC
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: duration_seconds
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: INTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: products_valid
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: INTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: pages_fetched
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: INTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: products_found
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: INTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: data_source
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: parser_used
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: error_message
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: platform
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: status
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: TEXT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+version: 1.0.0
+database_uuid: 2d42d560-f82a-4ff8-ab65-58e89ca61e99

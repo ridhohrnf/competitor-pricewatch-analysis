@@ -1,0 +1,112 @@
+version: 2
+
+models:
+  - name: report_daily_prices
+    description: >
+      Plain-language version of fct_product_price_daily for business users and the dashboard.
+      Grain: one row per date, platform and listing. No keys: names, platforms and dates are
+      already joined in.
+    columns:
+      - name: price_date
+        description: Day the price was seen (Asia/Jakarta).
+        data_tests: [not_null]
+      - name: platform
+        description: Tokopedia, Blibli or Klik Indomaret.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Tokopedia', 'Blibli', 'Klik Indomaret']
+      - name: product
+        description: The product's common name across platforms.
+        data_tests: [not_null]
+      - name: pack_size
+        description: Size and pack, e.g. "1.8 kg x 4".
+      - name: name_on_platform
+        description: The listing title exactly as the platform shows it.
+      - name: price_idr
+        description: Selling price in Rupiah.
+        data_tests: [not_null, positive_value]
+      - name: original_price_idr
+        description: Crossed-out price in Rupiah (equal to price_idr when there is no discount).
+      - name: discount_pct
+        description: Discount in percent, computed from the two prices.
+        data_tests:
+          - value_between:
+              arguments:
+                min_value: 0
+                max_value: 100
+      - name: data_source
+        description: Live crawl or Sample (synthetic). Do not mix them in conclusions.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Live crawl', 'Sample (synthetic)']
+
+  - name: report_price_comparison
+    description: >
+      Latest price of each product on each platform, side by side.
+      Grain: one row per product and data source.
+    columns:
+      - name: product
+        data_tests: [not_null]
+      - name: cheapest_platform
+        description: Platform with the lowest latest price.
+        data_tests: [not_null]
+      - name: price_gap_pct
+        description: How much more the most expensive platform charges than the cheapest, in percent.
+      - name: platforms_compared
+        description: On how many platforms the product was found (a gap needs 2 or more).
+      - name: data_source
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Live crawl', 'Sample (synthetic)']
+
+  - name: report_price_recommendations
+    description: >
+      Our recommended selling price next to competitor prices, from the latest recommendation run.
+      Grain: one row per product. A product seen in both live and sample data keeps the row with
+      more platforms compared (live on a tie), and data_source says which one. A view, so it
+      always shows the latest run.
+    columns:
+      - name: product
+        data_tests: [unique, not_null]
+      - name: recommended_price_idr
+        description: Price we suggest, in Rupiah.
+        data_tests: [not_null, positive_value]
+      - name: minimum_allowed_price_idr
+        description: Lowest price that still keeps the assumed minimum margin.
+      - name: vs_competitor_median_pct
+        description: Recommended price compared with the competitor median, in percent (negative = cheaper).
+      - name: tokopedia_price_idr
+        description: Latest Tokopedia price of the same product and data source, for side-by-side charts.
+      - name: blibli_price_idr
+        description: Latest Blibli price of the same product and data source.
+      - name: klikindomaret_price_idr
+        description: Latest Klik Indomaret price of the same product and data source.
+      - name: cheapest_platform
+        description: Platform with the lowest latest price.
+      - name: price_gap_pct
+        description: How much more the most expensive platform charges than the cheapest, in percent.
+      - name: how_it_was_set
+        description: The rule that produced the price, in words.
+        data_tests: [not_null]
+
+  - name: report_pipeline_health
+    description: >
+      Every crawl run in plain words: when, status, how many products and how many were rejected.
+      Grain: one row per crawl run. A view, so hours_ago is always current.
+    columns:
+      - name: platform
+        data_tests: [not_null]
+      - name: status
+        description: OK, Degraded, Failed or Blocked, with the reason.
+        data_tests: [not_null]
+      - name: hours_ago
+        description: Hours since the run started (a freshness indicator).
+      - name: parse_success_pct
+        description: Share of found products that passed the data contract, in percent.
+      - name: is_latest_run
+        description: True for the most recent run per platform and data source.

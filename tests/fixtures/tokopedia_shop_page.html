@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- Hand-written test fixture. It copies the *structure* of a Tokopedia shop page
+     (Apollo cache with pointers + server-rendered cards), not real scraped content. -->
+<html lang="id">
+<head><title>Toko Contoh</title></head>
+<body>
+<div class="css-hashed-a1b2">
+  <div class="css-hashed-c3d4">
+    <a href="https://www.tokopedia.com/unilever-official-store/contoh-sabun-cuci-piring-jeruk-nipis-750ml-1700000000000000001-1700000000000000002?extParam=src%3Dshop">
+      <img alt="product-image" src="https://images.example/1.jpg?x-signature=abc">
+    </a>
+    <div><span>25%</span></div>
+    <div><span>Contoh Sabun Cuci Piring Jeruk Nipis 750ml</span></div>
+    <div><span>Rp15.000</span><span>Rp20.000</span></div>
+    <div><span>4.9</span><span>100+ terjual</span></div>
+  </div>
+  <div class="css-hashed-c3d4">
+    <a href="https://www.tokopedia.com/unilever-official-store/contoh-deterjen-bubuk-800-g-isi-2?extParam=src%3Dshop">
+      <img alt="product-image" src="https://images.example/2.jpg?x-signature=def">
+    </a>
+    <div><span>Contoh Deterjen Bubuk 800 g isi 2</span></div>
+    <div><span>Rp42.500</span></div>
+  </div>
+</div>
+<script>
+window.__cache = {"$ROOT_QUERY.shop.data.0":{"name":"Contoh Sabun Cuci Piring Jeruk Nipis 750ml","product_url":"https://www.tokopedia.com/unilever-official-store/contoh-sabun-cuci-piring-jeruk-nipis-750ml-1700000000000000001-1700000000000000002?extParam=src%3Dshop","product_id":"111","price":{"type":"id","generated":true,"id":"$ROOT_QUERY.shop.data.0.price","typename":"ProductListPrice"},"campaign":{"type":"id","generated":true,"id":"$ROOT_QUERY.shop.data.0.campaign","typename":"ProductDetailCampaignType"},"stats":{"type":"id","generated":true,"id":"$ROOT_QUERY.shop.data.0.stats","typename":"ProductListStats"},"primary_image":{"type":"id","generated":true,"id":"$ROOT_QUERY.shop.data.0.primary_image","typename":"ProductListPrimaryImage"},"__typename":"ShopProductListDetail"},"$ROOT_QUERY.shop.data.0.price":{"text_idr":"Rp15.000","__typename":"ProductListPrice"},"$ROOT_QUERY.shop.data.0.campaign":{"discounted_percentage":"0","original_price_fmt":"Rp20.000","__typename":"ProductDetailCampaignType"},"$ROOT_QUERY.shop.data.0.stats":{"reviewCount":0,"averageRating":"4.9","__typename":"ProductListStats"},"$ROOT_QUERY.shop.data.0.primary_image":{"original":"https://images.example/1.jpg?x-signature=abc","__typename":"ProductListPrimaryImage"},"$ROOT_QUERY.shop.data.1":{"name":"Contoh Deterjen Bubuk 800 g isi 2","product_url":"https://www.tokopedia.com/unilever-official-store/contoh-deterjen-bubuk-800-g-isi-2?extParam=src%3Dshop","product_id":"222","price":{"type":"id","generated":true,"id":"$ROOT_QUERY.shop.data.1.price","typename":"ProductListPrice"},"campaign":{"type":"id","generated":true,"id":"$ROOT_QUERY.shop.data.1.campaign","typename":"ProductDetailCampaignType"},"__typename":"ShopProductListDetail"},"$ROOT_QUERY.shop.data.1.price":{"text_idr":"Rp42.500","__typename":"ProductListPrice"},"$ROOT_QUERY.shop.data.1.campaign":{"discounted_percentage":"0","original_price_fmt":"","__typename":"ProductDetailCampaignType"},"$ROOT_QUERY.shop.data.2":{"name":"Contoh Paket Promo }; Hemat","product_url":"https://www.tokopedia.com/unilever-official-store/contoh-paket-promo-hemat-1700000000000000009","product_id":"333","price":{"type":"id","generated":true,"id":"$ROOT_QUERY.shop.data.2.price","typename":"ProductListPrice"},"__typename":"ShopProductListDetail"},"$ROOT_QUERY.shop.data.2.price":{"text_idr":"Rp99.000","__typename":"ProductListPrice"},"$ROOT_QUERY.other":{"__typename":"SomethingElse","name":"not a product"}};
+</script>
+</body>
+</html>

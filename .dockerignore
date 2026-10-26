@@ -1,0 +1,10 @@
+.env
+data
+.venv
+**/__pycache__
+.pytest_cache
+.ruff_cache
+dbt/target
+dbt/logs
+docs/screenshots
+dbt/target_proof

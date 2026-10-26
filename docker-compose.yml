@@ -1,0 +1,129 @@
+x-app: &app
+  build: { context: ., target: app }
+  image: pricewatch-app
+  env_file: .env
+  volumes:
+    - ./data:/app/data            # landed HTML stays on this machine (gitignored)
+
+services:
+  postgres:
+    image: postgres:16
+    env_file: .env
+    ports: ["${POSTGRES_HOST_PORT:-5433}:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # 1) sample data + backfill from landed HTML + live Tokopedia crawl (rate-limited)
+  ingest:
+    <<: *app
+    # SKIP_LIVE_CRAWL=true in .env never contacts Tokopedia (sample + landed HTML only)
+    command: python -m pricewatch.cli ingest
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  # 2) raw -> silver -> gold, tests, freshness, docs
+  dbt:
+    <<: *app
+    working_dir: /app/dbt
+    # A stale live source is reported by `dbt source freshness` but does not stop the pipeline.
+    command: ["sh", "-c", "dbt build --fail-fast && (dbt source freshness || echo 'source freshness: see warnings above') && dbt docs generate"]
+    volumes:
+      - ./data:/app/data
+      - ./dbt/target:/app/dbt/target   # docs + run artifacts visible on the host
+    depends_on:
+      ingest: { condition: service_completed_successfully }
+
+  # 3) pricing recommendations (batch, all products in one run)
+  recommender:
+    <<: *app
+    command: python -m pricewatch.cli recommend
+    depends_on:
+      dbt: { condition: service_completed_successfully }
+
+  # 4) API (reads gold only, as role api_app)
+  api:
+    <<: *app
+    command: uvicorn pricewatch.api.main:app --host 0.0.0.0 --port 8000
+    ports: ["${API_HOST_PORT:-8000}:8000"]
+    depends_on:
+      recommender: { condition: service_completed_successfully }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # 5) Superset: prepares its own database, admin user and (if present) the exported dashboard
+  superset-init:
+    build: { context: ./superset }
+    image: pricewatch-superset
+    env_file: .env
+    user: root
+    command: ["sh", "/scripts/init.sh"]
+    volumes:
+      - ./superset:/scripts:ro
+      - ./dashboards:/app/dashboards:ro
+    depends_on:
+      dbt: { condition: service_completed_successfully }
+
+  # 6) dashboard (reads gold only, as role bi_reader)
+  superset:
+    image: pricewatch-superset
+    env_file: .env
+    ports: ["${SUPERSET_HOST_PORT:-8088}:8088"]
+    volumes:
+      - ./superset:/scripts:ro
+      - ./dashboards:/app/dashboards   # writable: `make dashboard-export` writes here
+    command: ["/usr/bin/run-server.sh"]
+    depends_on:
+      superset-init: { condition: service_completed_successfully }
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:8088/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 40
+
+  # 7) dbt docs + lineage graph
+  dbt-docs:
+    <<: *app
+    working_dir: /app/dbt
+    command: dbt docs serve --host 0.0.0.0 --port 8080 --no-browser
+    ports: ["${DBT_DOCS_HOST_PORT:-8080}:8080"]
+    volumes:
+      - ./dbt/target:/app/dbt/target
+    depends_on:
+      dbt: { condition: service_completed_successfully }
+
+  # Bonus: the same chain as Dagster assets (docker compose --profile orchestrator up -d dagster).
+  # Behind a profile so a plain `docker compose up` never crawls twice.
+  dagster:
+    build: { context: ., target: orchestrator }
+    image: pricewatch-orchestrator
+    env_file: .env
+    environment:
+      DAGSTER_HOME: /tmp/dagster_home
+    volumes:
+      - ./data:/app/data
+    ports: ["${DAGSTER_HOST_PORT:-3000}:3000"]
+    command: ["sh", "-c", "mkdir -p $$DAGSTER_HOME && cd dbt && dbt parse --quiet && cd .. && dagster dev -h 0.0.0.0 -p 3000 -m pricewatch.orchestration.definitions"]
+    profiles: ["orchestrator"]
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  dev:
+    build: { context: ., target: dev }
+    image: pricewatch-dev
+    env_file: .env
+    volumes: ["./:/app"]
+    profiles: ["tools"]
+    depends_on:
+      postgres: { condition: service_healthy }
+
+volumes:
+  pgdata:

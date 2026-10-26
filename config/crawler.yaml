@@ -1,0 +1,10 @@
+user_agent: "pricewatch-takehome/0.1"
+request_timeout_seconds: 20
+delay_seconds: 3.0
+delay_jitter_seconds: 1.5
+max_attempts: 3
+max_pages: 10
+min_hours_between_live_runs: 10
+
+health:
+  parse_success_rate_threshold: 0.90

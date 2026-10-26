@@ -1,0 +1,118 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Crawl output exactly as landed by the Python crawler / sample loader. Append-only,
+      no business logic. dbt only reads it.
+    schema: raw
+    tables:
+      - name: product_listing
+        description: One extracted product record per crawl observation (payload is text, as shown on the site).
+        config:
+          loaded_at_field: crawled_at
+          freshness:
+            warn_after: {count: 24, period: hour}
+            error_after: {count: 48, period: hour}
+            filter: "data_origin = 'live'"
+        columns:
+          - name: id
+            description: Surrogate key of the raw row.
+            data_tests: [unique, not_null]
+          - name: run_id
+            description: Crawl run that produced the row.
+            data_tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('raw', 'crawl_run')
+                    field: run_id
+          - name: platform
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ['tokopedia', 'klikindomaret', 'blibli']
+          - name: external_product_id
+            description: Listing id on the platform (the URL slug for Tokopedia).
+            data_tests: [not_null]
+          - name: crawled_at
+            description: When the page was fetched (UTC).
+            data_tests: [not_null]
+          - name: crawl_date
+            description: Business date of the crawl in Asia/Jakarta.
+          - name: data_origin
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ['live', 'sample']
+          - name: payload
+            description: Extracted fields as text (name, price_text, original_price_text, ...).
+          - name: payload_hash
+            description: sha256 of the business fields; part of the idempotency key.
+          - name: page_html_hash
+            description: sha256 of the whole landed page (audit link to data/landing).
+          - name: is_valid
+            description: Result of the crawler's contract check (Pydantic).
+          - name: validation_errors
+            description: '{"errors": [...], "warnings": [...]} from the contract check.'
+          - name: inserted_at
+            description: Load time; the watermark for incremental models.
+      - name: crawl_run
+        description: One row per crawl run (live or sample) with its health metrics.
+        columns:
+          - name: run_id
+            data_tests: [unique, not_null]
+          - name: status
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ['running', 'success', 'degraded', 'failed', 'blocked']
+          - name: data_origin
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ['live', 'sample']
+
+  - name: jobs
+    description: Tables written by Python jobs (not dbt), declared here for lineage and tests.
+    schema: gold
+    tables:
+      - name: fct_price_recommendation
+        description: >
+          Grain: one row per (run_id, product_master_key, data_origin). Written by
+          `pricewatch recommend` (recommender/job.py), append-only. Every row carries run_id,
+          model_version, run_at and params, so each recommendation can be traced and replayed.
+        columns:
+          - name: recommendation_id
+            data_tests: [unique, not_null]
+          - name: run_id
+            data_tests: [not_null]
+          - name: model_version
+            data_tests: [not_null]
+          - name: product_master_key
+            data_tests:
+              - not_null
+              - relationships:
+                  name: latest_recommendations_point_to_existing_products
+                  arguments:
+                    to: ref('dim_product_master')
+                    field: product_master_key
+                  config:
+                    severity: warn
+                    where: "run_id = (select run_id from gold.fct_price_recommendation order by run_at desc limit 1)"
+              - relationships:
+                  name: older_recommendations_whose_product_was_rekeyed
+                  arguments:
+                    to: ref('dim_product_master')
+                    field: product_master_key
+                  config:
+                    severity: warn
+          - name: recommended_price
+            data_tests: [positive_value]
+          - name: floor_price
+            data_tests: [positive_value]
+          - name: reason_code
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ['median_minus_x', 'margin_floor', 'single_platform_low_confidence']
