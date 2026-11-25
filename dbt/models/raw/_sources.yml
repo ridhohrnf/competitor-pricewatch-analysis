@@ -56,7 +56,7 @@ sources:
           - name: validation_errors
             description: '{"errors": [...], "warnings": [...]} from the contract check.'
           - name: inserted_at
-            description: Load time; the watermark for incremental models.
+            description: Load transaction start time, not necessarily when the row becomes visible.
       - name: crawl_run
         description: One row per crawl run (live or sample) with its health metrics.
         columns:

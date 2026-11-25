@@ -30,8 +30,5 @@ seeds:
     +schema: silver
 
 vars:
-  # How far back the incremental fact re-reads raw inserts, to absorb clock skew between
-  # the loader and the database (the watermark is inserted_at).
-  incremental_lookback_hours: 1
   # Above this share of single-platform sample listings, matching is probably broken (warn).
   max_unmatched_sample_ratio: 0.5

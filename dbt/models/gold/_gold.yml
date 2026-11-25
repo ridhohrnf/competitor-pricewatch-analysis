@@ -73,8 +73,8 @@ models:
       Grain: one row per (price_date, listing). price_date is the Asia/Jakarta date; the price
       is the last observation of that day. Joins: price_date → dim_date.date,
       platform → dim_platform.platform_code, product_master_key → dim_product_master.
-      Incremental (merge on price_date + listing_key): every (day, listing) that received a new
-      raw row since the last build is recomputed in full, using raw.inserted_at as the watermark.
+      Incremental builds compute daily rows from visible observations and merge only new or
+      changed rows on price_date + listing_key, regardless of crawl or insert time.
     data_tests:
       - unique_combination:
           arguments:
@@ -124,7 +124,7 @@ models:
               arguments:
                 values: ['live', 'sample']
       - name: _max_inserted_at
-        description: Technical. Latest raw.inserted_at in this row's group; the incremental watermark.
+        description: Technical. Latest raw.inserted_at among the accepted observations in this group.
 
   - name: fct_crawl_run
     description: >
