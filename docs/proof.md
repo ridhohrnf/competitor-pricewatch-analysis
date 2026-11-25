@@ -70,22 +70,30 @@ $ select data_origin, reject_reason, count(*) from silver.silver_rejected_listin
 
 ## P5 Late data and P9 SCD2
 
+**Incremental audit — `fct_product_price_daily` (the only incremental model).**
+Live crawls commit per page; landed-page replays and sample loads preserve the original crawl
+time and can load old observations in a single transaction per run. The checked-in sample alone
+spans August 17 to October 11, 2026, and the original P5 proof loaded an August observation in
+October. Those are examples of event-time lag, not measurements of production commit lag.
+The old one-hour lookback was on `inserted_at`, which Postgres sets from the transaction start,
+not the commit. A row that became visible more than one hour behind the fact's global watermark
+could be missed even though the old-crawl-date proof passed. The fact now compares recomputed
+daily rows with the target and merges only new or changed rows. This scans all accepted
+observations, but needs no lateness bound or one-time full refresh. The merge key is still
+`(price_date, listing_key)`, and the latest crawl (then highest raw ID for ties) still wins.
+
 ```
 $ docker compose run --rm dev python scripts/proof/late_data_and_scd2.py
-P5 target: blibli:bango-kecap-manis-refill-520-ml-6e7b29 on 2026-08-17: price 24400, 1 observation(s)
-loaded now (inserted_at = 2026-10-25 18:56) an observation crawled on 2026-08-17 23:00 WIB at Rp23900
-$ dbt run --select +fct_product_price_daily
-after incremental run: price 23900, 2 observation(s)
 P5 RESULT: late row reached gold
-
-P9: snapshot versions of blibli:bango-kecap-manis-refill-520-ml-6e7b29 before rename: 1
-$ dbt build --exclude resource_type:test resource_type:unit_test
-  Bango Kecap Manis Refill - 520 mL                            valid_from=2026-10-25 18:56 valid_to=2026-10-25 18:56
-  Bango Kecap Manis Refill - 520 mL (Kemasan Baru)             valid_from=2026-10-25 18:56 valid_to=null (current)
+P5 DELAYED COMMIT RESULT: corrected once
 P9 RESULT: old version closed, new version current
 ```
 
-The script works on a throw-away database (`pricewatch_proof`), not the main one.
+The delayed-commit case sets the correction's insert time two hours behind the fact's watermark.
+The script checks that an incremental run before commit sees no change, then checks that the
+correction wins the same-crawl-time tie and the fact still has exactly one row with the same
+observation count after another run. It works on a throw-away database (`pricewatch_proof`),
+not the main one.
 
 ## P6 Incremental equals full refresh
 
